@@ -73,22 +73,33 @@ The bot has a couple of commands. You need a "Manage Channels" permissions (or h
 **The default prefix is "!".**
 
 - `!soundmoji connect`
+
 Makes the bot connect to a voice channel you're in. **You have to be in a voice channel in order to use this command.**
 
 - `!soundmoji set_channels <channel1> <channel2> <...>`
+
 By default the bot listens for the keywords on all channels. You can, however, specify certain channel(s) for the bot to listen to.
 Example: `!soundmoji set_channels general` will make the bot listen to the messages on the `#general` channel. `!soundmoji set_channels general soundmoji` will make the bot listen to the messages on both the `#general` and `#soundmoji` channels.
 
 - `!soundmoji toggle_blocking`
+
 By default an user can change a sound which is already playing to another sound by posting a message with a keyword. You can toggle this behavior (if you do, keywords won't be accepted until the sound that was played out has finished playing).
 
 - `!soundmoji set_rate_limit_delay <new_rate_limit_in_seconds>`
+
 By default the bot will permit playing a sound every 3 seconds per channel. You can change this delay with this command. Example: `!soundmoji set_rate_limit_delay 10` means that each channel will have to wait 10 seconds between playing a sound.
 
 ### Setting up your own bot
 #### Requirements
 You require Ruby, [libsodium](https://github.com/meew0/discordrb/wiki/Installing-libsodium),  [libopus](https://github.com/meew0/discordrb/wiki/Installing-libopus) and a couple of gems installed on your system.
-You also need to have a Discord Bot token and ID, [see here for tips](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token).
+You also need to have a Discord Bot token and ID, [see here for tips](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). You will need to enter them as environment variables `SOUNDMOJI_BOT_ID` and `SOUNDMOJI_BOT_TOKEN`, as appropriate.
+
+Typical usage:
+```sh
+export SOUNDMOJI_BOT_ID=<discord_bot_id>
+export SOUNDMOJI_BOT_TOKEN=<discord_bot_token>
+```
+
 #### Instructions
 1. Clone this repository.
 2. Go into the bot's directory.
@@ -100,6 +111,3 @@ You also need to have a Discord Bot token and ID, [see here for tips](https://gi
 
 ### License
 GNU GPLv3.
-
-
-
