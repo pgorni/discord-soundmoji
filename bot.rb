@@ -18,7 +18,14 @@ bot = Discordrb::Commands::CommandBot.new(
 
 bot.include! Soundmoji
 
-puts "This bot's invite URL is #{bot.invite_url}."
-puts 'Click on it to invite it to your server.'
+
+
+puts %q{                                                           
+ _ ) o  _ _  _   _ _ )  __ _ _       _   _ ) _ _   _  o  o 
+(_(  ( ( (_ (_) ) (_(     ( (_) (_( ) ) (_( ) ) ) (_) (  ( 
+       _)                 _)                          _)   
+}
+
+puts "Invite the bot with this link: #{bot.invite_url}."
 
 bot.run
