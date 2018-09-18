@@ -83,7 +83,7 @@ class Soundmoji
   end
 
   def self.load_sounds
-    soundfile_path = ARGV.shift
+    soundfile_path = ENV['SOUNDMOJI_SOUNDS_PATH'] || ARGV.shift
     Dir.chdir(soundfile_path) if soundfile_path
     puts "Executing at #{Dir.pwd}"
     soundpacks = YAML.load_file("snd.yml")

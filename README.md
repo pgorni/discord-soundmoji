@@ -19,7 +19,7 @@ For example `lol` can play back either `laugh1.mp3` or `laugh2.mp3`, chosen rand
 ### Adding your own sounds
 
 #### Directory structure
-You have to create a file named `snd.yml`. In this file you should define the directories, which contain sound files. Each of these directories has to contain a `snd_pack.yml` file with keywords and the appropriate sound files.
+You have to create a file named `snd.yml`. In this file you should define the directories, which will contain the sound files. Each of these directories has to contain a `snd_pack.yml` file with keywords and the appropriate sound files.
 Example:
 - `snd.yml`:
 ```yaml
@@ -47,6 +47,7 @@ Output of `tree --dirsfirst`:
 │   └── snd_pack.yml
 └── snd.yml
 ```
+**By default, the bot will look for the `snd.yml` file in its directory.** This can be customized; more on this in the "Setting up your own bot" section.
 
 #### `snd.yml` syntax
 Each line of the `snd.yml` file has to contain the name of the sound collection and a path to the directory with a `snd_pack.yml` file and the sound files. **Please note there's no trailing slash.**
@@ -91,7 +92,7 @@ By default the bot will permit playing a sound every 3 seconds per channel. You 
 
 ### Setting up your own bot
 #### Requirements
-You require Ruby, [libsodium](https://github.com/meew0/discordrb/wiki/Installing-libsodium),  [libopus](https://github.com/meew0/discordrb/wiki/Installing-libopus) and a couple of gems installed on your system.
+You require Ruby, [libsodium](https://github.com/meew0/discordrb/wiki/Installing-libsodium), [libopus](https://github.com/meew0/discordrb/wiki/Installing-libopus) and a couple of gems installed on your system.
 You also need to have a Discord Bot token and ID, [see here for tips](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). You will need to enter them as environment variables `SOUNDMOJI_BOT_ID` and `SOUNDMOJI_BOT_TOKEN`, as appropriate.
 
 Typical usage:
@@ -100,14 +101,56 @@ export SOUNDMOJI_BOT_ID=<discord_bot_id>
 export SOUNDMOJI_BOT_TOKEN=<discord_bot_token>
 ```
 
+After setting the appropriate variables, run the bot with `ruby bot.rb`.
+
+#### Setting a custom soundpack path
+**By default, the bot will look for the `snd.yml` file in its directory.** You can make the bot use another directory, though, by specifying the path as an argument.
+
+Example:
+
+```
+ruby bot.rb /home/my_awesome_sounds
+```
+
+The bot will now enter the `/home/my_awesome_sounds` directory, look for the `snd.yml` file, parse it and start running.
+
+You can also set your custom directory by setting the `SOUNDMOJI_SOUNDS_PATH` environment variable, like so:
+
+```sh
+export SOUNDSMOJI_SOUNDS_PATH="/home/my_awesome_sounds"
+```
+
+#### Running with Docker
+
+You can run the bot with `Docker Compose`.
+
+Example `docker-compose.yml` file:
+
+```yaml
+version: '2'
+services:
+  bot:
+    image: pgorni/discord-soundmoji:latest
+    volumes:
+    # You definitely want to change this. 
+    - /some/path/on/host/discord-soundmoji-sounds:/snd
+    environment:
+      - SOUNDMOJI_BOT_ID=
+      - SOUNDMOJI_BOT_TOKEN=
+      - SOUNDMOJI_SOUNDS_PATH=/snd
+    restart: unless-stopped
+```
+
+Edit it as you wish, save it as `docker-compose.yml` and then just run `docker-compose up`. (You have to have Docker Compose installed for this, of course.)
+
+
 #### Instructions
 1. Clone this repository.
 2. Go into the bot's directory.
 3. Run `bundle install`
 4. Create the directories with sounds as explained before. You can create them in the bot's directory or somewhere else. In the latter case, you'll need to pass the location of the directory structure as an argument.
-5. Run the bot with `ruby bot.rb`. If your sound files are somewhere else, you need to pass the location of the `snd.yml` file and the subsequent folders as an argument, for example `ruby bot.rb /home/my-discord-sounds`.
+5. Run the bot with `ruby bot.rb`. If your sound files are somewhere else, you need to pass the location of the `snd.yml` file and the subsequent directories as an argument, for example `ruby bot.rb /home/my-discord-sounds`.
 6. Invite the bot to your server with the link it displays.
-7. 
 
 ### License
 GNU GPLv3.
