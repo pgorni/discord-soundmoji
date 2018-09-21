@@ -77,6 +77,10 @@ The bot has a couple of commands. You need a "Manage Channels" permissions (or h
 
 Makes the bot connect to a voice channel you're in. **You have to be in a voice channel in order to use this command.**
 
+- `!soundmoji disconnect`
+
+Makes the bot disconnect from a voice channel.
+
 - `!soundmoji set_channels <channel1> <channel2> <...>`
 
 By default the bot listens for the keywords on all channels. You can, however, specify certain channel(s) for the bot to listen to.

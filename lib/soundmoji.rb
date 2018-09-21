@@ -32,6 +32,9 @@ class Soundmoji
       event.bot.voice_connect(channel)
       event.user.pm("Connected to voice channel: #{channel.name}")
       puts "[INFO] #{Time.now}: connected to voice channel #{channel.name}"
+    when "disconnect"
+      # This should disconnect from a voice channel only on the server where it's called.
+      event.bot.voice.destroy
     when "set_channels"
       if args.first == "any" or args.first == "*"
         @options[:channels] = nil
