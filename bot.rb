@@ -3,10 +3,10 @@ require './lib/soundmoji.rb'
 
 # Check for required env. variables
 ["SOUNDMOJI_BOT_ID", "SOUNDMOJI_BOT_TOKEN"].each do |var|
-    unless ENV[var]
-        puts "#{var}: variable not specified, exiting."
-        return
-    end
+  unless ENV[var]
+    puts "#{var}: variable not specified, exiting."
+    exit
+  end
 end
 
 # Create the bot

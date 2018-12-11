@@ -10,9 +10,9 @@ class Soundmoji
 
   ready do |event|
     @all_sounds = {}
-    puts "Loading sounds..."
+    puts "[INFO] Loading sounds..."
     load_sounds
-    event.bot.game = "#{@all_sounds.count} sounds"
+    event.bot.game = "#{@all_sounds.count} sounds | #{event.bot.prefix}soundmoji help"
     @options = {
       blocking: false,
       channels: nil,
@@ -24,6 +24,7 @@ class Soundmoji
 
   command(:soundmoji) do |event, command, *args|
     next unless event.author.permission? @options[:required_permission]
+    next if event.channel.pm?
 
     case command
     when "connect"
@@ -56,6 +57,56 @@ class Soundmoji
         rate_limiter.bucket :sound, delay: @options[:rate_limit_delay]
         event.user.pm("⭕ rate limiting set to #{@options[:rate_limit_delay]}")
       end
+    when "list_sounds"
+      # XXX this works for now
+      if @all_sounds.count >= (60 * 5)
+        event.user.pm("There are too many sounds loaded. Look for the sound listing on the server.")
+        next
+      end
+
+      @all_sounds.keys.map { |kw| kw.inspect }.each_slice(60).with_index do |kw, i|
+        event.user.pm.send_embed do |embed|
+          embed.title = "discord-soundmoji"
+          embed.description = "Sound listing, part #{i + 1}"
+          embed.colour = "#FFFF00"
+          kw.each do |kw|
+            embed.add_field(name: kw.to_s, value: "---")
+          end
+        end
+        sleep(5)
+      end
+    when "help"
+      event.channel.send_embed do |embed|
+        embed.title = 'discord-soundmoji'
+        embed.description = "A simple bot for adding sounds to emoji or words."
+        embed.colour = "#FFFF00"
+        embed.add_field(
+          name: "Usage", 
+          value: [
+            "In order to hear sounds, you have to connect to a voice channel the bot's in.\n",
+            "Then, typing a keyword or using a specific emoji will trigger sound playback.\n",
+            "You can get the list of sounds by typing `#{event.bot.prefix}soundmoji list_sounds`.\n",
+            "**WARNING!** The server may have lots of sounds, so you may (and probably will) get a lot of messages.\n",
+            "It's usually better to find the sound listing somewhere on the server you're in."
+          ].join("")
+        )
+        embed.add_field(
+          name: "Config", 
+          value: [
+            "You have to have the `#{@options[:required_permission]}` permission to be able to use these commands.\n",
+            "\n",
+            "`#{event.bot.prefix}soundmoji connect`: make the bot connect to a voice channel you're in\n",
+            "`#{event.bot.prefix}soundmoji disconnect`: disconnect the bot from a voice channel\n",
+            "`#{event.bot.prefix}soundmoji set_channels <channel(s) (divided by spaces) OR any>`: make the bot search for emoji or keywords in the specified channel(s)\n",
+            "`#{event.bot.prefix}soundmoji toggle_blocking`: set whether new emoji or keyword trigger should stop the sound that's already being played\n",
+            "`#{event.bot.prefix}soundmoji set_rate_limit_delay <seconds>`: stop the users from spamming sounds\n"
+          ].join("")
+        )
+        embed.add_field(
+          name: "Donations",
+          value: "Like the bot? [Support it on Patreon!](https://patreon.com/zanbots)"
+        )
+      end
     end
   end
 
@@ -86,10 +137,16 @@ class Soundmoji
     end
   end
 
+  private 
+
   def self.load_sounds
     soundfile_path = ENV['SOUNDMOJI_SOUNDS_PATH'] || ARGV.shift
     Dir.chdir(soundfile_path) if soundfile_path
-    puts "Executing at #{Dir.pwd}"
+    puts "[INFO] Executing at #{Dir.pwd}"
+    unless File.exist?("snd.yml")
+      puts "[ERR] snd.yml not found!"
+      exit
+    end
     soundpacks = YAML.load_file("snd.yml")
     soundpacks.each do |name, path|
       puts "Loading soundpack #{name} at #{path + "/snd_pack.yml"}."

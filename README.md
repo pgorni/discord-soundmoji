@@ -94,6 +94,11 @@ By default an user can change a sound which is already playing to another sound 
 
 By default the bot will permit playing a sound every 3 seconds per channel. You can change this delay with this command. Example: `!soundmoji set_rate_limit_delay 10` means that each channel will have to wait 10 seconds between playing a sound.
 
+### Help and sound listing
+Some help is built in, you can trigger it by typing `!soundmoji help`.
+
+You can also get the listing of the loaded sounds by typing `!soundmoji list_sounds`. Be wary that some servers may have lots of sounds, so you may get a lot of messages. It's usually better to see the sound listing on the server.
+
 ### Setting up your own bot
 #### Requirements
 You require Ruby, [libsodium](https://github.com/meew0/discordrb/wiki/Installing-libsodium), [libopus](https://github.com/meew0/discordrb/wiki/Installing-libopus) and a couple of gems installed on your system.
@@ -147,6 +152,13 @@ services:
 
 Edit it as you wish, save it as `docker-compose.yml` and then just run `docker-compose up`. (You have to have Docker Compose installed for this, of course.)
 
+
+### Donations
+This software will always be free. Your help will be greatly appreciated! :revolving_hearts:
+
+<a href="https://patreon.com/zanbots">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="50">
+</a>
 
 #### Instructions
 1. Clone this repository.
